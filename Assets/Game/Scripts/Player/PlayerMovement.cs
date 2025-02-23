@@ -168,7 +168,7 @@ public class PlayerMovement : MonoBehaviour
         {
             _rigidBody.AddForce(jumpDirection * _jumpForce * Time.deltaTime);
         }
-        else if (!_isGrounded && _playerStance == PlayerStance.Climb && _canClimbJump) // Fungsi untuk Jump saat Climbing
+        else if (!_isGrounded && _playerStance == PlayerStance.Climb && _canClimbJump) // Fitur Jump Climb
         {
             _canClimbJump = false;
             if (_wallClimbAxisDirection.magnitude >= 0.1)
@@ -180,7 +180,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 _rigidBody.AddForce(jumpDirection * _wallClimbJumpForce * Time.deltaTime);
             }
-            StartCoroutine(ClimbJumpCooldown());
+            StartCoroutine(JumpClimbCooldown());
         }
 
     }
@@ -241,8 +241,8 @@ public class PlayerMovement : MonoBehaviour
 
 
     #region IEnumerator Functions
-    // Climb Jump Cooldown
-    private IEnumerator ClimbJumpCooldown()
+    // Jump climb cooldown
+    private IEnumerator JumpClimbCooldown()
     {
         yield return new WaitForSeconds(1f);
         _canClimbJump = true;
