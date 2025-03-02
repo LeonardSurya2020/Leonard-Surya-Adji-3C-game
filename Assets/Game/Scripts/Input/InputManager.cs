@@ -2,15 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class InputManager : MonoBehaviour
 {
     #region Parameters
-    public Action<Vector2> onMoveInput;
-    public Action<bool> onSprintInput;
-    public Action onJumpInput;
-    public Action onClimbInput;
-    public Action onCancelClimb;
+    public Action<Vector2> OnMoveInput;
+    public Action<bool> OnSprintInput;
+    public Action OnJumpInput;
+    public Action OnClimbInput;
+    public Action OnCancelClimb;
+    public Action OnChangePOV;
     #endregion
 
     #region Main Functions
@@ -38,9 +40,9 @@ public class InputManager : MonoBehaviour
         float verticalInput = Input.GetAxis("Vertical");
 
         Vector2 inputAxis = new Vector2(horizontalInput, verticalInput);
-        if(onMoveInput != null )
+        if(OnMoveInput != null )
         {
-            onMoveInput(inputAxis);
+            OnMoveInput(inputAxis);
         }
     }
 
@@ -52,11 +54,11 @@ public class InputManager : MonoBehaviour
         if (isPressSprintInput)
         {
             Debug.Log("sprinting");
-            onSprintInput(true);
+            OnSprintInput(true);
         }
         else
         {
-            onSprintInput(false);
+            OnSprintInput(false);
         }
     }
 
@@ -81,7 +83,7 @@ public class InputManager : MonoBehaviour
 
         if(isPressJumpInput)
         {
-            onJumpInput();
+            OnJumpInput();
         }
     }
 
@@ -92,7 +94,10 @@ public class InputManager : MonoBehaviour
 
         if (isPressChangePOVInput)
         {
-            Debug.Log("Change POV");
+            if(OnChangePOV != null )
+            {
+                OnChangePOV();
+            }
         }
     }
 
@@ -102,7 +107,7 @@ public class InputManager : MonoBehaviour
         bool isPressClimbInput = Input.GetKeyDown(KeyCode.E);
         if (isPressClimbInput)
         {
-            onClimbInput();
+            OnClimbInput();
         }
     }
 
@@ -123,9 +128,9 @@ public class InputManager : MonoBehaviour
 
         if(isPressCancelInput)
         {
-            if(onCancelClimb != null)
+            if(OnCancelClimb != null)
             {
-                onCancelClimb();
+                OnCancelClimb();
             }
             
         }
