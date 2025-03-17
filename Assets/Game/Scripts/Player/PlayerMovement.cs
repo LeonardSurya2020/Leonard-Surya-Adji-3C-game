@@ -97,6 +97,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float _maxGlideRotationX;
 
+    [SerializeField]
+    private float _minGlideRotationZ;
+
+    [SerializeField]
+    private float _maxGlideRotationZ;
+
+
+
     [Header("Attack & Combo Parameters")]
 
     [SerializeField]
@@ -110,6 +118,11 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField]
     private float _resetComboInterval;
+
+    [Header("Audio Manager")]
+
+    [SerializeField]
+    private PlayerAudioManager _playerAudioManager;
 
     // non-SerializeField parameters
     private Vector2 _wallClimbAxisDirection;
@@ -126,6 +139,7 @@ public class PlayerMovement : MonoBehaviour
     private bool _isPunching;
     private int _combo = 0;
     private Coroutine _resetCombo;
+    private Vector3 rotationDegree = Vector3.zero;
     #endregion
 
     #region Main Function
@@ -244,10 +258,11 @@ public class PlayerMovement : MonoBehaviour
         }
         else if(isPlayerGliding)
         {
-            Vector3 rotationDegree = transform.rotation.eulerAngles;
+            //Vector3 rotationDegree = transform.rotation.eulerAngles;
             rotationDegree.x += _glideRotationSpeed.x * axisDirection.y * Time.deltaTime;
             rotationDegree.x = Mathf.Clamp(rotationDegree.x,_minGlideRotationX, _maxGlideRotationX);
             rotationDegree.z += _glideRotationSpeed.z * axisDirection.x * Time.deltaTime;
+            rotationDegree.z = Mathf.Clamp(rotationDegree.z, _minGlideRotationZ, _maxGlideRotationZ);
             rotationDegree.y += _glideRotationSpeed.y * axisDirection.x * Time.deltaTime;
             transform.rotation = Quaternion.Euler(rotationDegree);
 
@@ -277,9 +292,9 @@ public class PlayerMovement : MonoBehaviour
     private void Jump()
     {
         Vector3 jumpDirection = Vector3.up;
-        if (_isGrounded && !_animator.GetCurrentAnimatorStateInfo(0).IsName("Landing"))
+        if (_isGrounded && !_isPunching && !_animator.GetCurrentAnimatorStateInfo(0).IsName("Landing") && !_animator.GetCurrentAnimatorStateInfo(0).IsName("Falling"))
         {
-            _rigidBody.AddForce(jumpDirection * _jumpForce * Time.deltaTime);
+            _rigidBody.AddForce(jumpDirection * _jumpForce, ForceMode.Impulse);
             _animator.SetTrigger("Jump");
             
         }
@@ -287,7 +302,7 @@ public class PlayerMovement : MonoBehaviour
         {
             _jumpCounter++;
             _rigidBody.velocity = Vector3.zero;
-            _rigidBody.AddForce(jumpDirection * _jumpForce * Time.deltaTime);
+            _rigidBody.AddForce(jumpDirection * _jumpForce , ForceMode.Impulse);
 
         }
         else if (!_isGrounded && _playerStance == PlayerStance.Climb && _canClimbJump) // Fitur Jump Climb
@@ -423,9 +438,11 @@ public class PlayerMovement : MonoBehaviour
     {
         if(_playerStance != PlayerStance.Glide && !_isGrounded)
         {
+             rotationDegree = transform.rotation.eulerAngles;
             _playerStance = PlayerStance.Glide;
             _animator.SetBool("IsGliding", true);
             _cameraManager.SetFPSClampedCamera(true, transform.rotation.eulerAngles);
+            _playerAudioManager.PlayGlideSfx();
         }    
     }
 
@@ -436,6 +453,7 @@ public class PlayerMovement : MonoBehaviour
             _playerStance = PlayerStance.Stand;
             _animator.SetBool("IsGliding", false);
             _cameraManager.SetFPSClampedCamera(false, transform.rotation.eulerAngles);
+            _playerAudioManager.StopGlideSfx();
         }
     }
 
@@ -501,6 +519,4 @@ public class PlayerMovement : MonoBehaviour
         _combo = 0;
     }
     #endregion
-
-
 }

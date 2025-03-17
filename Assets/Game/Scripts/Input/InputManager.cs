@@ -17,6 +17,7 @@ public class InputManager : MonoBehaviour
     public Action OnGlideInput;
     public Action OnCancelGlide;
     public Action OnPunchInput;
+    public Action OnMainMenuInput;
     #endregion
 
     #region Main Functions
@@ -166,7 +167,10 @@ public class InputManager : MonoBehaviour
 
         if(isPressMainMenuInput)
         {
-            Debug.Log("Open main menu");
+           if (OnMainMenuInput != null)
+            {
+                OnMainMenuInput();
+            }
         }
     }
 
