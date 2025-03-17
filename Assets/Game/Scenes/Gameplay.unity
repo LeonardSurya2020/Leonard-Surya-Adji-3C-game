@@ -10182,7 +10182,7 @@ MonoBehaviour:
   _climbableLayer:
     serializedVersion: 2
     m_Bits: 8
-  _climbOffset: {x: 0, y: 1, z: 0.5}
+  _climbOffset: {x: 0, y: 1, z: 0.6}
   _glideSpeed: 70
   _airDrag: 5
   _glideRotationSpeed: {x: 20, y: 40, z: 20}
