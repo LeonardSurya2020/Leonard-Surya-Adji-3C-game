@@ -17,7 +17,10 @@ public class InputManager : MonoBehaviour
     public Action OnGlideInput;
     public Action OnCancelGlide;
     public Action OnPunchInput;
-    public Action OnMainMenuInput;
+    public Action OnPauseMenuInput;
+    public Action OnResumeGameInput;
+
+    private bool _isPaused = false;
     #endregion
 
     #region Main Functions
@@ -168,9 +171,15 @@ public class InputManager : MonoBehaviour
 
         if(isPressMainMenuInput)
         {
-           if (OnMainMenuInput != null)
+           if (OnPauseMenuInput != null && _isPaused == false)
+           {
+                _isPaused = true;
+                OnPauseMenuInput();
+           }
+           else if (OnResumeGameInput != null && _isPaused == true)
             {
-                OnMainMenuInput();
+                _isPaused = false;
+                OnResumeGameInput();
             }
         }
     }

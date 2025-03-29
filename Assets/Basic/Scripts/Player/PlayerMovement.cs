@@ -124,6 +124,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private PlayerAudioManager _playerAudioManager;
 
+    [Header("Reset Checkpoint")]
+    [SerializeField]
+    private Transform _resetCheckPointPosition;
+
     // non-SerializeField parameters
     private Vector2 _wallClimbAxisDirection;
     private float _rotationSmoothVelocity;
@@ -198,6 +202,8 @@ public class PlayerMovement : MonoBehaviour
         _cameraManager.OnChangePerspective -= ChangePerspective;
     }
     #endregion
+
+
 
     #region Player Movement & Input Functions
     private void Move(Vector2 axisDirection)
@@ -532,6 +538,27 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+
+    public void ResetPositionToCheckPoint()
+    {
+        if (_resetCheckPointPosition != null)
+        {
+            transform.position = _resetCheckPointPosition.position;
+            transform.rotation = _resetCheckPointPosition.rotation;
+        }
+    }
+
+    public void SetCheckPoint(Transform checkpoint)
+    {
+        if (_resetCheckPointPosition == checkpoint)
+        {
+            Debug.Log("tidak boleh sama");
+            return;
+
+        }
+        _resetCheckPointPosition = checkpoint;
+    }
+
     #endregion
 
 

@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
+
+    #region Parameters
+
     public Action OnChangePerspective;
 
     [SerializeField]
@@ -19,7 +22,9 @@ public class CameraManager : MonoBehaviour
 
     [SerializeField]
     private InputManager _inputManager;
+    #endregion
 
+    #region Main Functions
     private void Start()
     {
         _inputManager.OnChangePOV += SwitchCamera;
@@ -29,6 +34,9 @@ public class CameraManager : MonoBehaviour
     {
         _inputManager.OnChangePOV -= SwitchCamera;
     }
+    #endregion
+
+    #region Camera Manager Functions
 
     public void SetTPSFieldOfView(float fieldOfView)
     {
@@ -67,4 +75,5 @@ public class CameraManager : MonoBehaviour
             _fpsCamera.gameObject.SetActive(false);
         }
     }
+    #endregion
 }

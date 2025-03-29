@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerAudioManager : MonoBehaviour
 {
+
+    #region Parameters
+
     [SerializeField]
     private AudioSource _footStepSfx;
 
@@ -15,8 +18,9 @@ public class PlayerAudioManager : MonoBehaviour
 
     [SerializeField]
     private AudioSource _glideSfx;
+    #endregion
 
-
+    #region SFX Functions
     private void PlayFootstepSfx()
     {
         _footStepSfx.volume = Random.Range(0.8f, 1f);
@@ -45,4 +49,5 @@ public class PlayerAudioManager : MonoBehaviour
     {
         _glideSfx.Stop();
     }
+    #endregion
 }
